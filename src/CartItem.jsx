@@ -1,11 +1,25 @@
-import React from 'react';
+import React {useState} from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { removeItem, updateQuantity } from './CartSlice';
 import './CartItem.css';
+import { addItem, removeItem, updateQuantity, clearCart } from './CartSlice';
+import TotalCost from "./TotalCost";
 
 const CartItem = ({ onContinueShopping }) => {
+  const [showItems, setShowItems] = useState(false);
   const cart = useSelector(state => state.cart.items);
   const dispatch = useDispatch();
+
+   const handleToggleItems = () => {
+       console.log("handleToggleItems called");
+       setShowItems(!showItems);
+   };
+
+   const handleAddToCart = (index) => {
+       if (venueItems[index].name === "Auditorium Hall (Capacity:200)" && venueItems[index].quantity >= 3) {
+         return;
+       }
+       dispatch(incrementQuantity(index));
+     };
 
   removeItem: (state, action) => {
       state.items = state.items.filter(item => item.name !== action.payload);
