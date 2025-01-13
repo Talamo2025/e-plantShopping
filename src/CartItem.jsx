@@ -7,6 +7,16 @@ const CartItem = ({ onContinueShopping }) => {
   const cart = useSelector(state => state.cart.items);
   const dispatch = useDispatch();
 
+  removeItem: (state, action) => {
+      state.items = state.items.filter(item => item.name !== action.payload);
+
+    },
+    updateQuantity: (state, action) => {
+      const { name, quantity } = action.payload;
+      const itemToUpdate = state.items.find(item => item.name === name);
+      if (itemToUpdate) {
+       itemToUpdate.quantity = quantity;
+}
   // Calculate total amount for all products in the cart
   const calculateTotalAmount = () => {
  
