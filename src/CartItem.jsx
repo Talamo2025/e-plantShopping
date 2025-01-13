@@ -34,15 +34,53 @@ const CartItem = ({ onContinueShopping }) => {
   };
 
   const handleDecrement = (item) => {
-    dispatch(decrementAvQuantity(index));
+    dispatch(decrementitemQuantity(index));
 
   };
 
   const handleRemove = (item) => {
+     if (venueItems[index].quantity > 0) {
+         dispatch(decrementQuantity(index));
+      }
   };
 
   // Calculate total cost based on quantity for an item
-  const calculateTotalCost = (item) => {
+ 
+    const calculateTotalCost = (item) => {
+     let totalCost = 0;
+       if (section === "venue") {
+           venueItems.forEach((item) => {
+               totalCost += item.cost * item.quantity;
+           });
+       } else if (section === "av") {
+           avItems.forEach((item) => {
+               totalCost += item.cost * item.quantity;
+           });
+       } else if (section === "meals") {
+           mealsItems.forEach((item) => {
+               if (item.selected) {
+                 totalCost += item.cost * numberOfPeople;
+               }
+             });
+       }
+   return totalCost;
+  };
+   const venueTotalCost = calculateTotalCost("venue");
+const avTotalCost = calculateTotalCost("av");
+const mealsTotalCost = calculateTotalCost("meals");
+   const navigateToProducts = (idType) => {
+       if (idType == '#venue' || idType == '#addons' || idType == '#meals') {
+         if (showItems) { // Check if showItems is false
+           setShowItems(!showItems); // Toggle showItems to true only if it's currently false
+         }
+       }
+     }
+     const totalCosts = {
+       venue: venueTotalCost,
+       av: avTotalCost,
+       meals: mealsTotalCost,
+   };
+
   };
 
   return (
