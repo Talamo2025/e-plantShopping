@@ -1,8 +1,11 @@
 import { configureStore } from '@reduxjs/toolkit';
 import cartReducer from './CartSlice';
+export default store;
+
  const store = configureStore({
     reducer: {
         cart: cartReducer,
+    }
     reducers: {
     addItem: (state, action) => {
     const { name, image, cost } = action.payload;
