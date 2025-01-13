@@ -8,22 +8,14 @@ export const CartSlice = createSlice({
     items: [], // Initialize items as an empty array
   },
 
-   const handleAddToCart = (product) => {
- dispatch(addItem(product));
- setAddedToCart((prevState) => ({
-    ...prevState,
-    [product.name]: true, // Set the product name as key and value as true to indicate it's added to cart
-  }));
-};
-
-  reducers: {
+    reducers: {
     addItem: (state, action) => {
-    const { name, image, cost } = action.payload;
-    const existingItem = state.items.find(item => item.name === name);
-    if (existingItem) {
-    existingItem.quantity++;
-    } else {
-       state.items.push({ name, image, cost, quantity: 1 });
+       const { name, image, cost } = action.payload;
+       const existingItem = state.items.find(item => item.name === name);
+       if (existingItem) {
+          existingItem.quantity++;
+       } else {
+         state.items.push({ name, image, cost, quantity: 1 });
  }
 },
 
