@@ -9,28 +9,35 @@ const CartItem = ({ onContinueShopping }) => {
   const cart = useSelector(state => state.cart.items);
   const dispatch = useDispatch();
 
-   const handleToggleItems = () => {
-       console.log("handleToggleItems called");
-       setShowItems(!showItems);
+  const venueItems = useSelector((state) => state.venue);
+  
+  const handleContinueShopping = (e) => {
+    onContinueShopping();
+  };
+
+  const handleIncrement = (item) => {
+    
+    if (item) {
+        dispatch(updateQuantity({ name: item.name, quantity: item.quantity + 1 }));
+      }
    };
 
-   const handleAddToCart = (index) => {
-       if (venueItems[index].name === "Auditorium Hall (Capacity:200)" && venueItems[index].quantity >= 3) {
-         return;
-       }
-       dispatch(incrementQuantity(index));
-     };
+  const handleDecrement = (item) => {
+    if (item.quantity > 1) {
+        dispatch(updateQuantity({ name: item.name, quantity: item.quantity - 1 }));
+      } else {
+        dispatch(removeItem(item))
+      }
+  };
 
-  removeItem: (state, action) => {
-      state.items = state.items.filter(item => item.name !== action.payload);
+  const handleRemove = (item) => {
+    dispatch(removeItem(item.name));
+    
+  };
 
-    },
-    updateQuantity: (state, action) => {
-      const { name, quantity } = action.payload;
-      const itemToUpdate = state.items.find(item => item.name === name);
-      if (itemToUpdate) {
-       itemToUpdate.quantity = quantity;
-}
+
+  const handleCheckoutShopping = (e) => {
+    e.preventDefault();
   // Calculate total amount for all products in the cart
   const calculateTotalAmount = () => {
  
@@ -89,14 +96,35 @@ const mealsTotalCost = calculateTotalCost("meals");
          }
        }
      }
-     const totalCosts = {
-       venue: venueTotalCost,
-       av: avTotalCost,
-       meals: mealsTotalCost,
-   };
+
+     alert('Thank you for the purchase !');
+
+  dispatch(clearCart());
+
+};
+    const calculateTotalAmount = () => {
+    const parseCost = (cost) => {
+      return parseFloat(cost.replace(/[^0-9.-]+/g, '')) || 0;
+    };
+  
+    // Calculate total amount based on the cart items
+    return cart.reduce((total, item) => {
+      const itemCost = parseCost(item.cost);
+
+      return total + (itemCost * item.quantity);
+
+    }, 0);
 
   };
-
+  
+  const calculateTotalCost = (item) => {
+    const parseCost = (cost) => {
+      return parseFloat(cost.replace(/[^0-9.-]+/g, '')) || 0;
+    };
+  
+      const itemCost = parseCost(item.cost);
+      return (itemCost * item.quantity);
+  };
   return (
     <div className="cart-container">
       <h2 style={{ color: 'black' }}>Total Cart Amount: ${calculateTotalAmount()}</h2>
